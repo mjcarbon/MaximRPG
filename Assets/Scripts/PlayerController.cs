@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterController controller; // ACCESS TO PLAYER MOVEMENT OR CHARACTER CONTROLLER AKA "MOTOR"
     public Transform cam; //NEED REF TO CAMERA 
-    
+    public bool isWalking = false;
     
     public float speed = 6f; // SPEED OF MOVEMENT 
     public float turnSmoothTime = 0.1f; 
@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
         if(direction.magnitude >= 0.1f) // if >= 0.1f, THIS MEANS WE ARE GETTING SOME INPUT TO MOVE 
         {
+            isWalking = true; // SET isWALKING TO TRUE 
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y; 
             // THIS RETURNS THE ANGLE THAT THE VECTOR IS RELATIVE TO Y AXIS GOING COUNTER CLOCKWISE 
             
