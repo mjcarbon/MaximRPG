@@ -5,11 +5,13 @@ public class PlayerController : MonoBehaviour
 {
     public CharacterController controller; // ACCESS TO PLAYER MOVEMENT OR CHARACTER CONTROLLER AKA "MOTOR"
     public Transform cam; //NEED REF TO CAMERA 
-    public bool isWalking = false;
-    
-    public float speed = 6f; // SPEED OF MOVEMENT 
+    public float speed = 6f;
     public float turnSmoothTime = 0.1f; 
     float turnSmoothVelocity; 
+
+    public bool isWalking = false;
+    public bool isRunning = false; 
+    public bool isJumping = false; 
 
     void FixedUpdate()
     {
@@ -18,10 +20,30 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = new Vector3(horizontal, 0f, vertical).normalized; // NORMALIZED BC WE DO NOT WANT TO GO FASTER WHEN PRESSING TWO KEYS AT ONCE 
         // WE ARE MAKING THIS VECTOR SHORTER WITH MAGNITUDE = 1, but with same direction. 
         // THIS IS ESSENTIALLY A UNIT VECTOR 
-
         if(direction.magnitude >= 0.1f) // if >= 0.1f, THIS MEANS WE ARE GETTING SOME INPUT TO MOVE 
         {
-            isWalking = true; // SET isWALKING TO TRUE 
+            if (Input.GetKey("space"))
+            {
+                Debug.Log("PRESSED SPACE");
+                isJumping = true; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+            }
+            if (!Input.GetKey("space"))
+            {
+                isJumping = false; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+            }
+            if (Input.GetKey("left shift"))
+            {
+                isRunning = true; 
+                isWalking = true; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+                speed = 12f; // CHANGE TO SPRINT SPEED 
+
+            }
+            if (!Input.GetKey("left shift"))
+            {
+                isRunning = false;
+                isWalking = true; // SET isWALKING TO TRUE 
+                speed = 6f; // CHANGE TO Walk Speed 
+            }
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y; 
             // THIS RETURNS THE ANGLE THAT THE VECTOR IS RELATIVE TO Y AXIS GOING COUNTER CLOCKWISE 
             
@@ -38,6 +60,13 @@ public class PlayerController : MonoBehaviour
 
             controller.Move(moveDir.normalized * speed * Time.deltaTime); // CONTROLLER.MOVE ACTIVATES DIR. MAKES PLAYER MOVE ALONG THE VECTOR DIR 
             // TIME DELTATIME MAKES IT FRAMERATE INDEPENDENT 
-        } 
+        }
+        if(direction.magnitude == 0) // if >= 0.1f, THIS MEANS WE ARE GETTING SOME INPUT TO MOVE 
+        {
+            isRunning = false; // THESE ARE THE CASES FOR CHARACTER TO BE IDLE 
+            isWalking = false; 
+            isJumping = false;
+            
+        }
     }
 }
