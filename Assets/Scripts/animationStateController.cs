@@ -29,25 +29,23 @@ public class animationStateController : MonoBehaviour
         {
             animator.SetBool("isRunning", false);
         }
-        if (player.isJumping == true)
+        if (player.jumpingFactor > 0f)
         {
-            Invoke("Jump", 5);
+            animator.SetBool("JumpPrep", true);
         }
-        if (player.isJumping == false)
+        if (player.jumpingFactor == 0f)
         {
-            Invoke("Jump", 5);
+            animator.SetBool("JumpPrep", false);
         }
-    }
+        if (player.landingFactor > 0f)
+        {
+            animator.SetBool("JumpLand", true);
+        }
+        if (player.landingFactor == 0f)
+        {
+            animator.SetBool("JumpLand", false);
+        }
 
-    void Jump()
-    {
-        if (player.isJumping == true)
-        {
-            animator.SetBool("isJumping", true);
-        }
-        if (player.isJumping == false)
-        {
-            animator.SetBool("isJumping", false);
-        }
     }
 }
+

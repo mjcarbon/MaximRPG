@@ -11,8 +11,38 @@ public class PlayerController : MonoBehaviour
 
     public bool isWalking = false;
     public bool isRunning = false; 
-    public bool isJumping = false; 
+    public float jumpingFactor = 0f; 
+    public float landingFactor = 0f;
+    public bool inAir = false;
 
+    void Update()
+    {
+        if(Input.GetKey("space") && jumpingFactor == 0)
+            {
+                Debug.Log("PRESSED SPACE");
+                jumpingFactor += 25f; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+
+            }
+            if(jumpingFactor > 0f)
+            {
+                jumpingFactor -= 1f;
+                if (jumpingFactor == 0)
+                {
+                    inAir = true;
+                    landingFactor += 24f;
+                }
+
+            }
+            if(inAir == true)
+            {
+                landingFactor -= 1f;
+                if(landingFactor == 0)
+                {
+                    inAir = false;
+                    Debug.Log("Made it");
+                }
+            }
+    }
     void FixedUpdate()
     {
         float horizontal = Input.GetAxisRaw("Horizontal"); // USING ARRROW KEYS. a = -1, d = 1 
@@ -22,15 +52,7 @@ public class PlayerController : MonoBehaviour
         // THIS IS ESSENTIALLY A UNIT VECTOR 
         if(direction.magnitude >= 0.1f) // if >= 0.1f, THIS MEANS WE ARE GETTING SOME INPUT TO MOVE 
         {
-            if (Input.GetKey("space"))
-            {
-                Debug.Log("PRESSED SPACE");
-                isJumping = true; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
-            }
-            if (!Input.GetKey("space"))
-            {
-                isJumping = false; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
-            }
+            
             if (Input.GetKey("left shift"))
             {
                 isRunning = true; 
@@ -64,9 +86,7 @@ public class PlayerController : MonoBehaviour
         if(direction.magnitude == 0) // if >= 0.1f, THIS MEANS WE ARE GETTING SOME INPUT TO MOVE 
         {
             isRunning = false; // THESE ARE THE CASES FOR CHARACTER TO BE IDLE 
-            isWalking = false; 
-            isJumping = false;
-            
+            isWalking = false;             
         }
     }
 }
