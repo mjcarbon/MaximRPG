@@ -36,14 +36,16 @@ public class animationStateController : MonoBehaviour
         if (player.jumpingFactor == 0f)
         {
             animator.SetBool("JumpPrep", false);
+
         }
-        if (player.landingFactor > 0f)
+        if (player.inAir == true)
         {
             animator.SetBool("JumpLand", true);
         }
-        if (player.landingFactor == 0f)
+        if (player.inAir == false)
         {
             animator.SetBool("JumpLand", false);
+
         }
 
     }

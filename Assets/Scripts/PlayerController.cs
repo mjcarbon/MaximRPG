@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey("space") && jumpingFactor == 0)
             {
                 Debug.Log("PRESSED SPACE");
-                jumpingFactor += 25f; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+                jumpingFactor += 51f; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
 
             }
             if(jumpingFactor > 0f)
