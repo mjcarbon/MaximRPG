@@ -25,6 +25,5 @@ public class FollowPlayer : MonoBehaviour
         transform.position = player.position + offset * currentZoom;  
         transform.LookAt(player.position + Vector3.up);
         transform.RotateAround(player.position, Vector3.up, yaw);
-
     }
 }

@@ -8,7 +8,13 @@ public class PlayerController : MonoBehaviour
     public float speed = 6f;
     public float turnSmoothTime = 0.1f; 
     float turnSmoothVelocity; 
-
+    // PROJECTILE 
+    public GameObject bullet; 
+    public float shootRate = 0f; 
+    public float shootForce = 0f; 
+    private float shootRateTimeStamp = 0f; 
+    public Transform gun; 
+    // PROJECTILE 
     public bool isWalking = false;
     public bool isRunning = false; 
     public float jumpingFactor = 0f; 
@@ -17,10 +23,21 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        // SHOOTING PROJECTILE 
+        if (Input.GetKey(KeyCode.Mouse0))
+        {
+            if(Time.time > shootRateTimeStamp)
+            {
+                GameObject go = (GameObject)Instantiate(bullet, gun.position , gun.rotation);
+                go.GetComponent<Rigidbody>().AddForce(gun.forward * shootForce);
+                shootRateTimeStamp = Time.time + shootRate; 
+            }
+        }
         if(Input.GetKey("space") && jumpingFactor == 0)
             {
-                Debug.Log("PRESSED SPACE");
-                jumpingFactor += 51f; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
+                Debug.Log("PRESSED SPACE YESS ");
+                jumpingFactor += 51f; // adding 51f for 51 FRAMES 
+    
 
             }
             if(jumpingFactor > 0f)
@@ -29,7 +46,7 @@ public class PlayerController : MonoBehaviour
                 if (jumpingFactor == 0)
                 {
                     inAir = true;
-                    landingFactor += 24f;
+                    landingFactor += 24f; // adding 24f for 24 FRAMES 
                 }
 
             }

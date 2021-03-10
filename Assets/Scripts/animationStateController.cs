@@ -45,9 +45,7 @@ public class animationStateController : MonoBehaviour
         if (player.inAir == false)
         {
             animator.SetBool("JumpLand", false);
-
         }
-
     }
 }
 
