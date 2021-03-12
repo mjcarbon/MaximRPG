@@ -3,7 +3,8 @@
 public class Grapple : MonoBehaviour
 {
     public PlayerController playerController; 
-    public CharacterController controller;
+    public PlayerCollision PlayerCollision;
+    public Rigidbody rb;
     public Camera cam; 
     public float maxGrappleDist; 
     public float speed; 
@@ -29,12 +30,14 @@ public class Grapple : MonoBehaviour
 
     private void MovePlayer()
     {
-        transform.position = Vector3.Lerp(transform.position, grappleLocation,speed * Time.deltaTime * 0.5f);
+        transform.position = Vector3.Lerp(transform.position, grappleLocation,speed * Time.deltaTime);
         float dist = Vector3.Distance(transform.position, grappleLocation);
         if (dist <= 2f)
         {
             doGrapple = false; 
             playerController.enabled = true; 
+            PlayerCollision.grounded = false; 
+            rb.isKinematic = false; 
         }
     }
     private void GrappleRay()
@@ -49,6 +52,7 @@ public class Grapple : MonoBehaviour
                 grappleLocation = hit.point; 
                 doGrapple = true; 
                 playerController.enabled = false;
+                rb.isKinematic = true; 
                 Debug.Log("New RAY " + grappleLocation);
             }
         }

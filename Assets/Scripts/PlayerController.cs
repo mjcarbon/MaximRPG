@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 public class PlayerController : MonoBehaviour
 { 
-    public CharacterController controller;  
+    public Rigidbody rb;  
     public Transform cam; //NEED REF TO CAMERA 
     public float speed = 5f;
     public float turnSmoothTime = 0.1f; 
     float turnSmoothVelocity; 
+    public PlayerCollision PlayerCollision; 
 
 
     // MOVEMENT
@@ -32,14 +33,14 @@ public class PlayerController : MonoBehaviour
             {
                 isRunning = true; 
                 isWalking = true; // SO FOR isRunning to work WE NEED isWalking as a prequisite. 
-                speed = 80f; // CHANGE TO SPRINT SPEED 
+                speed = 1.5f; // CHANGE TO SPRINT SPEED 
 
             }
             if (!Input.GetKey("left shift"))
             {
                 isRunning = false;
                 isWalking = true; // SET isWALKING TO TRUE 
-                speed = 40f; // CHANGE TO Walk Speed 
+                speed = 1f; // CHANGE TO Walk Speed 
             }
             float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y; 
             // THIS RETURNS THE ANGLE THAT THE VECTOR IS RELATIVE TO Y AXIS GOING COUNTER CLOCKWISE 
@@ -55,7 +56,9 @@ public class PlayerController : MonoBehaviour
             // WE CHANGE THIS FROM A ROTATION INTO A DIRECTION BY MULTIPLYING IT WITH VECTOR3.FORWARD 
             // targetAngle HELPS TAKE INTO ACCOUNT THE ROTATION OF OUR CAMERA 
 
-            controller.Move(moveDir.normalized * 5f * Time.deltaTime); // CONTROLLER.MOVE ACTIVATES DIR. MAKES PLAYER MOVE ALONG THE VECTOR DIR 
+            rb.AddForce(moveDir.normalized * speed); // CONTROLLER.MOVE ACTIVATES DIR. MAKES PLAYER MOVE ALONG THE VECTOR DIR 
+            
+            
             // TIME DELTATIME MAKES IT FRAMERATE INDEPENDENT 
             
 
@@ -66,17 +69,13 @@ public class PlayerController : MonoBehaviour
             isWalking = false;    
         }
 
-        if(controller.isGrounded)
-        {
-            grounded = true; 
-        }
-        if (Input.GetKeyDown(KeyCode.Space) && grounded == true)
+        if (Input.GetKeyDown(KeyCode.Space) && PlayerCollision.grounded == true)
             {
                 Vector3 jumpForce = new Vector3(0, 0, 0);
                 jumpForce.y += jumpSpeed;
 
-                controller.Move(jumpForce * 5f * Time.deltaTime);  
-                grounded = false; 
+                rb.AddForce(jumpForce );  
+                PlayerCollision.grounded = false; 
             }
 
         
